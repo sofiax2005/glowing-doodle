@@ -1,0 +1,25 @@
+{
+  "name": "normaldb-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for NormalDB",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "d3": "^7.8.5",
+    "gsap": "^3.12.4",
+    "axios": "^1.6.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.0.8",
+    "tailwindcss": "^3.4.0"
+  },
+  "keywords": ["database", "visualization", "normalization", "react", "d3"],
+  "author": "Your Name",
+  "license": "MIT"
+}
