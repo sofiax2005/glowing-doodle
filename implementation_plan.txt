@@ -1,0 +1,140 @@
+
+# NormalDB: Complete Implementation Plan
+
+## Project Overview
+NormalDB is an interactive, scroll-driven educational platform that teaches database normalization 
+(UNF → 1NF → 2NF → 3NF) while functioning as a real DBMS application. Users can upload CSV files 
+and watch their messy data transform through animated visualizations powered by React + D3.js, 
+with a Node.js/Express backend and PostgreSQL database.
+
+## Technology Stack
+- **Frontend**: React 18, D3.js v7, GSAP (ScrollTrigger), TailwindCSS
+- **Backend**: Node.js 18, Express 4.18, PostgreSQL 15
+- **Testing**: Jest, React Testing Library, Supertest
+- **DevOps**: Docker, Docker Compose, GitHub Actions
+- **Code Quality**: ESLint, Prettier
+
+## Repository Structure
+
+normaldb/
+├── README.md                          # Main documentation with setup instructions
+├── IMPLEMENTATION.md                  # This file - detailed implementation plan
+├── VIVA_DEFENSE.md                   # Viva defense script for academic review
+├── docker-compose.yml                 # Multi-container orchestration
+├── .env.example                       # Environment variables template
+├── .gitignore
+├── .github/
+│   └── workflows/
+│       └── ci.yml                     # GitHub Actions CI/CD
+│
+├── frontend/                          # React + D3 visualization app
+│   ├── Dockerfile
+│   ├── .dockerignore
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── vite.config.js                # Vite bundler configuration
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   ├── .eslintrc.json
+│   ├── .prettierrc
+│   ├── public/
+│   │   └── index.html
+│   └── src/
+│       ├── main.jsx                   # App entry point
+│       ├── App.jsx                    # Main app component
+│       ├── index.css                  # Global styles with Tailwind
+│       ├── components/
+│       │   ├── ScrollStory.jsx        # Main scroll container
+│       │   ├── StorySection.jsx       # Individual scroll section
+│       │   ├── ProgressBar.jsx        # Normal form progress indicator
+│       │   ├── UploadCSV.jsx          # CSV upload interface
+│       │   ├── DatasetSelector.jsx    # Pre-loaded dataset selector
+│       │   ├── TableInspector.jsx     # Interactive table viewer
+│       │   └── SQLPreview.jsx         # SQL code viewer and executor
+│       ├── visualizations/
+│       │   ├── MessyTableBlob.jsx     # UNF visualization
+│       │   ├── RowToEntityMorph.jsx   # UNF → 1NF animation
+│       │   ├── AttributeMoveAnim.jsx  # 1NF → 2NF animation
+│       │   ├── ForeignKeyLinks.jsx    # FK relationship drawing
+│       │   ├── TransitiveDep.jsx      # 2NF → 3NF animation
+│       │   └── d3-helpers.js          # Reusable D3 utilities
+│       ├── hooks/
+│       │   ├── useNormalization.js    # API integration hook
+│       │   ├── useScroll.js           # Scroll position tracking
+│       │   └── useD3Transition.js     # D3 animation management
+│       ├── services/
+│       │   └── api.js                 # Axios API client
+│       └── utils/
+│           ├── constants.js           # App constants
+│           └── helpers.js             # Utility functions
+│
+├── backend/                           # Node.js/Express API
+│   ├── Dockerfile
+│   ├── .dockerignore
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── .eslintrc.json
+│   ├── .prettierrc
+│   ├── jest.config.js                # Jest testing configuration
+│   └── src/
+│       ├── index.js                   # Express app entry
+│       ├── app.js                     # Express configuration
+│       ├── config/
+│       │   └── database.js            # PostgreSQL connection pool
+│       ├── middleware/
+│       │   ├── errorHandler.js
+│       │   ├── rateLimit.js
+│       │   ├── auth.js                # JWT authentication
+│       │   └── validation.js          # Request validation
+│       ├── routes/
+│       │   ├── normalization.routes.js # Normalization endpoints
+│       │   ├── dataset.routes.js      # Dataset management
+│       │   └── health.routes.js       # Health check
+│       ├── controllers/
+│       │   ├── normalization.controller.js
+│       │   └── dataset.controller.js
+│       ├── services/
+│       │   └── normalization/
+│       │       ├── NormalizationEngine.js      # Main engine orchestrator
+│       │       ├── SchemaParser.js             # CSV/schema parsing
+│       │       ├── FunctionalDependency.js     # FD detection algorithms
+│       │       ├── CandidateKeyFinder.js       # Key detection with closures
+│       │       ├── NormalFormChecker.js        # 1NF/2NF/3NF validators
+│       │       ├── SchemaDecomposer.js         # Table decomposition logic
+│       │       └── SQLGenerator.js             # CREATE TABLE & migration SQL
+│       ├── models/
+│       │   ├── Dataset.js
+│       │   ├── Transformation.js
+│       │   └── NormalizedSchema.js
+│       ├── db/
+│       │   ├── migrations/
+│       │   │   ├── 001_initial_schema.sql
+│       │   │   └── 002_tv_channel_demo.sql    # TV channel schema + data
+│       │   └── seeds/
+│       │       └── demo-datasets.sql
+│       └── __tests__/
+│           ├── unit/
+│           │   ├── FunctionalDependency.test.js
+│           │   ├── CandidateKeyFinder.test.js
+│           │   ├── NormalFormChecker.test.js
+│           │   └── SchemaDecomposer.test.js
+│           ├── integration/
+│           │   └── normalization-api.test.js
+│           └── fixtures/
+│               ├── sample-unnormalized.csv
+│               ├── student-course.csv
+│               └── social-media.csv
+│
+├── database/                          # PostgreSQL initialization
+│   ├── Dockerfile                     # Custom Postgres image
+│   └── init-scripts/
+│       ├── 01-create-databases.sql
+│       ├── 02-create-schema.sql
+│       └── 03-seed-tv-channel-data.sql # TV channel dataset
+│
+└── docs/                              # Additional documentation
+    ├── ALGORITHM_ANALYSIS.md          # Complexity analysis
+    ├── API_REFERENCE.md               # REST API documentation
+    ├── DEPLOYMENT_GUIDE.md            # Production deployment steps
+    ├── DEMO_SCRIPT.md                 # Video demo recording script
+    └── SECURITY.md                    # Security notes and mitigations
